@@ -128,6 +128,12 @@ pub struct ServerArgs {
     /// Start accepting health checks immediately instead of waiting for the
     /// main process's startup warmup request to finish.
     pub skip_server_warmup: bool,
+    /// Priority given to a generation request that sets none; `None` unless
+    /// priority scheduling is on (Python `_set_default_priority`).
+    pub default_priority_value: Option<i64>,
+    /// Apply the router's `x-override-*` headers to `/generate` bodies
+    /// (`SGLANG_ENABLE_REQUEST_HEADER_OVERRIDES`).
+    pub enable_request_header_overrides: bool,
     /// Streamed `/generate` frames carry per-step deltas instead of cumulative
     /// text. Matches the Python `TokenizerManager`.
     pub incremental_streaming_output: bool,
@@ -182,6 +188,8 @@ impl ServerArgs {
         detokenizer_worker_num,
         skip_tokenizer_init,
         skip_server_warmup,
+        default_priority_value,
+        enable_request_header_overrides,
         incremental_streaming_output,
         disaggregation_mode,
         model_config,
@@ -215,6 +223,8 @@ impl ServerArgs {
         detokenizer_worker_num: usize,
         skip_tokenizer_init: bool,
         skip_server_warmup: bool,
+        default_priority_value: Option<i64>,
+        enable_request_header_overrides: bool,
         incremental_streaming_output: bool,
         disaggregation_mode: DisaggregationMode,
         model_config: ModelConfig,
@@ -246,6 +256,8 @@ impl ServerArgs {
             detokenizer_worker_num,
             skip_tokenizer_init,
             skip_server_warmup,
+            default_priority_value,
+            enable_request_header_overrides,
             incremental_streaming_output,
             disaggregation_mode,
             model_config,
@@ -285,6 +297,8 @@ impl Default for ServerArgs {
             detokenizer_worker_num: 1,
             skip_tokenizer_init: false,
             skip_server_warmup: false,
+            default_priority_value: None,
+            enable_request_header_overrides: false,
             incremental_streaming_output: false,
             disaggregation_mode: DisaggregationMode::Null,
             model_config: ModelConfig::default(),
